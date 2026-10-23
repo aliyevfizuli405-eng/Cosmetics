@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sed -i -E 's#^\\(    image: .*\\),\\\\r?$#\\\\1,\\\\n    isWishlisted: false,#' \"c:/Users/aliye/OneDrive/Desktop/MakeUp/Front/src/js/products.js\" && grep -c isWishlisted \"c:/Users/aliye/OneDrive/Desktop/MakeUp/Front/src/js/products.js\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\aliye\\OneDrive\\Desktop\\MakeUp\\Front\\src\\js"
+    ]
+  }
+}
