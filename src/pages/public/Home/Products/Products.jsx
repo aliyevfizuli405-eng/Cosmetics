@@ -1,46 +1,40 @@
-import React, { useRef, useState } from "react";
-// Import Swiper React components
+
+import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { products } from "@/js/products";
-// Import Swiper styles
+
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-// import required modules
 import { Pagination, Navigation } from "swiper/modules";
 import { Card } from "@/components/Card/Card";
+import { BrandLogos } from "@/components/brandLogos/BrandLogos";
 
 export const Product = () => {
-  const [swiperRef, setSwiperRef] = useState(null);
+  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [activeCategory, setActiveCategory] = useState("All");
 
-  let appendNumber = 4;
-  let prependNumber = 1;
+  const categories = [
+    "All",
+    "Make Up",
+    "SPA",
+    "Skin care",
+    "Hair care",
+  ];
 
-  const prepend2 = () => {
-    swiperRef.prependSlide([
-      '<div class="swiper-slide">Slide ' + --prependNumber + "</div>",
-      '<div class="swiper-slide">Slide ' + --prependNumber + "</div>",
-    ]);
-  };
+  const handleCategory = (category) => {
+    setActiveCategory(category);
 
-  const prepend = () => {
-    swiperRef.prependSlide(
-      '<div class="swiper-slide">Slide ' + --prependNumber + "</div>",
-    );
-  };
-
-  const append = () => {
-    swiperRef.appendSlide(
-      '<div class="swiper-slide">Slide ' + ++appendNumber + "</div>",
-    );
-  };
-
-  const append2 = () => {
-    swiperRef.appendSlide([
-      '<div class="swiper-slide">Slide ' + ++appendNumber + "</div>",
-      '<div class="swiper-slide">Slide ' + ++appendNumber + "</div>",
-    ]);
+    if (category === "All") {
+      setFilteredProducts(products);
+    } else {
+      setFilteredProducts(
+        products.filter((product) =>
+          product.category.includes(category)
+        )
+      );
+    }
   };
 
   return (
@@ -49,39 +43,38 @@ export const Product = () => {
         <h3 className="eyri text-[#d05278] text-[50px] text-center">
           Cosmetics
         </h3>
+
         <h2 className="text yazi2 text-[54px] text-center">
           Trending products
         </h2>
-        <div className="flex justify-center items-center ">
-          <p className=" text-[#666666] max-w-md yazi2 text-center">
-            Nourish your skin with toxin-free cosmetic products. With the offers
-            that you can’t refuse.
+
+        <div className="flex justify-center items-center">
+          <p className="text-[#666666] max-w-md yazi2 text-center">
+            Nourish your skin with toxin-free cosmetic products.
+            With the offers that you can’t refuse.
           </p>
         </div>
-        <div className="flex justify-center items-center mt-10 gap-2 mb-10">
-          <button className="px-7.5 py-1.5 border border-gray-200 yazi1 text-gray-600 text-[16px]">
-            Make Up
-          </button>
-          <button className="px-7.5 py-1.5 border border-gray-200 yazi1 text-gray-600 text-[16px]">
-            SPA
-          </button>
-          <button className="px-7.5 py-1.5 border border-gray-200 yazi1 text-gray-600 text-[16px]">
-            Perfume
-          </button>
-          <button className="px-7.5 py-1.5 border border-gray-200 yazi1 text-gray-600 text-[16px]">
-            Nails
-          </button>
-          <button className="px-7.5 py-1.5 border border-gray-200 yazi1 text-gray-600 text-[16px]">
-            Skin Care
-          </button>
-          <button className="px-7.5 py-1.5 border border-gray-200 yazi1 text-gray-600 text-[16px]">
-            Hair Care
-          </button>
+
+     
+        <div className="flex  flex-col  sm:flex-row justify-center items-center mt-10 gap-2 mb-10 flex-wrap">
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() => handleCategory(category)}
+              className={`px-7.5 py-1.5 border w-full sm:w-auto border-gray-200 yazi1 text-[16px] transition-colors duration-200 ${
+                activeCategory === category
+                  ? "bg-[#d05278] text-white border-[#d05278]"
+                  : "text-gray-600 hover:bg-[#d05278] hover:text-white hover:border-[#d05278]"
+              }`}
+            >
+              {category}
+            </button>
+          ))}
         </div>
+
+        
         <Swiper
-          onSwiper={setSwiperRef}
           slidesPerView={4}
-          centeredSlides={false}
           spaceBetween={30}
           pagination={{
             type: "fraction",
@@ -89,14 +82,28 @@ export const Product = () => {
           navigation={true}
           modules={[Pagination, Navigation]}
           className="mySwiper"
+          breakpoints={{
+            320: {
+              slidesPerView: 1,
+              spaceBetween: 15,
+            },
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 4,
+              spaceBetween: 30,
+            },
+          }}
         >
-          {products.map((product) => (
-            <SwiperSlide>
-              <Card product={product}></Card>
+          {filteredProducts.map((filteredProduct) => (
+            <SwiperSlide key={filteredProduct.id}>
+              <Card product={filteredProduct} />
             </SwiperSlide>
           ))}
-          
         </Swiper>
+        <BrandLogos/>
       </section>
     </>
   );
